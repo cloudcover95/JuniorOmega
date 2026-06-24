@@ -1,0 +1,1 @@
+full README content from the standalone version
