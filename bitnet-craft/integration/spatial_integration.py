@@ -1,0 +1,1 @@
+Deeper integration between bitnet-craft and JuniorOmega spatial module
