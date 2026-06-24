@@ -1,1 +1,1 @@
-Full production-grade README for the bitnet-craft package
+Full rewritten production-grade README for bitnet-craft package
