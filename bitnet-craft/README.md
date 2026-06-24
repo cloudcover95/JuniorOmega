@@ -1,1 +1,1 @@
-full README content from the standalone version
+Full production-grade README for the bitnet-craft package
