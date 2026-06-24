@@ -1,0 +1,1 @@
+# JuniorSwarm - Agent coordination and swarm intelligence layer
