@@ -1,1 +1,1 @@
-Full rewritten production-grade README for bitnet-craft package
+Thorough production-grade README modeled after JuniorEngrTools style
