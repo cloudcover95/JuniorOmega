@@ -1,1 +1,1 @@
-JuniorSwarm orchestrator with RPC-style coordination
+JuniorSwarmOrchestrator now uses portable SimulationKernels
