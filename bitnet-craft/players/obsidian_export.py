@@ -1,0 +1,1 @@
+Improved Obsidian export utilities for agent traces and world state

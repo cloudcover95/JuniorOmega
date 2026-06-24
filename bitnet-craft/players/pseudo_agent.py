@@ -1,1 +1,1 @@
-Pseudo-agentic players that populate the world and export rich traces to Obsidian
+Enhanced PseudoAgentPlayer with movement, building, and reaction behaviors
