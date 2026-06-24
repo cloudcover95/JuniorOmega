@@ -1,1 +1,1 @@
-Enhanced PseudoAgentPlayer with movement, building, and reaction behaviors
+Richer agent behaviors (movement, building, reacting)

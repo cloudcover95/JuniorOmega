@@ -1,1 +1,1 @@
-Expanded sandbox with rate limits, auditing, and Obsidian export
+Expanded sandbox with better limits and Obsidian export

@@ -1,1 +1,1 @@
-EmulatorController with WebSocket integration and richer behaviors
+EmulatorController with deeper WebSocket integration
