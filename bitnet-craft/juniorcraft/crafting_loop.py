@@ -1,1 +1,1 @@
-Production-grade JuniorCraft crafting loop with gravity integration
+Updated JuniorCraftLoop using portable SimulationKernels
