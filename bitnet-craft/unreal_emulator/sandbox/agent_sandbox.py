@@ -1,1 +1,1 @@
-Agent sandbox for safe execution
+Expanded sandbox with rate limits, auditing, and Obsidian export

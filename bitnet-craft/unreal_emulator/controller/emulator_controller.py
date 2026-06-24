@@ -1,1 +1,1 @@
-Main controller with sandbox + UI hooks
+EmulatorController with WebSocket integration and richer behaviors
