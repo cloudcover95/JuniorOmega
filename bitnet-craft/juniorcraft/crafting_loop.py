@@ -1,0 +1,1 @@
+Production-grade JuniorCraft crafting loop with gravity integration
