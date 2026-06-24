@@ -1,0 +1,1 @@
+JuniorSwarm orchestrator with RPC-style coordination
