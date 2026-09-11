@@ -1,0 +1,8 @@
+TITLE: BRACKET
+REV A
+MM
+VIEW: plan, elev, section
+DIM_OK: yes
+REDLINE: layer map agreed OUTLINE=profile DIMS=dims
+REDLINE: none other
+ELEV FRONT
