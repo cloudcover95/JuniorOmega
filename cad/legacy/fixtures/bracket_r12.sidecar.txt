@@ -3,6 +3,7 @@ REV A
 MM
 VIEW: plan, elev, section
 DIM_OK: yes
+HEIGHT: 8
 REDLINE: layer map agreed OUTLINE=profile DIMS=dims
 REDLINE: none other
 ELEV FRONT
