@@ -25,5 +25,13 @@ def fill_from_text(meta: DrawingMeta, text: str) -> DrawingMeta:
         meta.filled["title"] = meta.title
     if "ELEV" not in t and "SECTION" not in t:
         meta.missing_elev = True
+        if "elevation" not in meta.holes:
+            meta.holes.append("elevation")
     meta.filled_are_hypotheses = True
+    try:
+        from adaptations.omega_cad.fill import propose
+
+        meta.filled.update(propose(meta.holes, text))
+    except Exception:
+        pass
     return meta
