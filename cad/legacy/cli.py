@@ -7,8 +7,10 @@ from pathlib import Path
 
 from cad.legacy.holes import fill_from_text
 from cad.legacy.ingest import classify
+from cad.legacy.layers import validate
 from cad.legacy.pilot import checklist
 from cad.legacy.recon import primitives_from_dxf_text, to_3d
+from cad.legacy.spatial import apply_height
 
 LAYER_MAP = {
     "0": "_ignore",
@@ -38,8 +40,16 @@ def run(path: Path, sidecar: str = "") -> dict:
     layers = {p.layer for p in prims}
     if layers:
         meta.layer_map = {x: LAYER_MAP.get(x.upper(), f"misc_{x.lower()}") for x in layers}
-    solid = to_3d(meta, prims)
+    lv = validate(meta.layer_map)
+    if not lv["layer_ok"]:
+        meta.holes.append("layers")
+        meta.intent_flags.append("layer_validation_failed")
+    height = apply_height(meta, sidecar or text)
+    solid = to_3d(meta, prims, height)
     gate = checklist(meta)
+    if not lv["layer_ok"]:
+        gate["release_rest_of_archive"] = False
+        gate["missing"] = list(gate["missing"]) + ["layer_ok"]
     return {
         "source": meta.source,
         "kind": meta.kind,
@@ -47,6 +57,7 @@ def run(path: Path, sidecar: str = "") -> dict:
         "title": meta.title,
         "revision": meta.revision,
         "layer_map": meta.layer_map,
+        "layers": lv,
         "solid": solid.__dict__,
         "filled": meta.filled,
         "pilot": gate,
@@ -54,8 +65,16 @@ def run(path: Path, sidecar: str = "") -> dict:
 
 
 def main(argv: list[str]) -> int:
+    if len(argv) >= 2 and argv[1] == "project":
+        from cad.legacy.project import export
+
+        sheet = Path(argv[2])
+        side = Path(argv[3]).read_text(encoding="utf-8") if len(argv) > 3 else ""
+        dest = Path(argv[4]) if len(argv) > 4 else Path("cad_out") / sheet.stem
+        print(json.dumps(export(sheet, side, dest), indent=2))
+        return 0
     if len(argv) < 2:
-        print("usage: python -m cad.legacy.cli <file> [sidecar.txt]")
+        print("usage: python -m cad.legacy <file> [sidecar] | project <file> [sidecar] [dest]")
         return 2
     side = Path(argv[2]).read_text(encoding="utf-8") if len(argv) > 2 else ""
     print(json.dumps(run(Path(argv[1]), side), indent=2))

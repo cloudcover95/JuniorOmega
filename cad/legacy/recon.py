@@ -1,4 +1,4 @@
-"""2D primitives + a flagged 3D stand-in. Missing elevation ≠ silent solid."""
+"""2D primitives + volume. Missing elevation ≠ silent solid."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -21,11 +21,11 @@ class Solid3D:
     w: float
     d: float
     h: float | None
+    volume: float | None
     hypothesis: bool
 
 
 def primitives_from_dxf_text(text: str) -> list[Prim2D]:
-    """Minimal LINE grab from ASCII DXF."""
     lines = text.splitlines()
     out: list[Prim2D] = []
     i = 0
@@ -66,10 +66,12 @@ def bounds(prims: list[Prim2D]) -> tuple[float, float]:
     return max(xs) - min(xs) or 1.0, max(ys) - min(ys) or 1.0
 
 
-def to_3d(meta: DrawingMeta, prims: list[Prim2D]) -> Solid3D:
+def to_3d(meta: DrawingMeta, prims: list[Prim2D], height: float | None = None) -> Solid3D:
     w, d = bounds(prims)
-    if meta.missing_elev or not prims:
+    if height is None and (meta.missing_elev or not prims):
         meta.intent_flags.append("height_is_hypothesis")
-        meta.holes.append("elevation")
-        return Solid3D("box", w, d, None, True)
-    return Solid3D("box", w, d, min(w, d) * 0.25, False)
+        if "elevation" not in meta.holes:
+            meta.holes.append("elevation")
+        return Solid3D("box", w, d, None, None, True)
+    h = height if height is not None else min(w, d) * 0.25
+    return Solid3D("box", w, d, h, w * d * h, False)
