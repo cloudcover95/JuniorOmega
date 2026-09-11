@@ -15,8 +15,9 @@ class DxfPilotTests(unittest.TestCase):
         dxf = ROOT / "cad" / "legacy" / "fixtures" / "bracket_r12.dxf"
         out = run(dxf, "TITLE: BRACKET\nREV A\nMM ELEV FRONT")
         self.assertEqual(out["kind"], "dxf")
-        self.assertIn("OUTLINE", out.get("solid") and {"OUTLINE"} or {"OUTLINE"})
-        self.assertTrue(out["solid"]["w"] >= 40 or out["kind"] == "dxf")
+        self.assertEqual(out["layer_map"].get("OUTLINE"), "profile")
+        self.assertEqual(out["layer_map"].get("DIMS"), "dims")
+        self.assertGreaterEqual(out["solid"]["w"], 40)
 
 
 if __name__ == "__main__":

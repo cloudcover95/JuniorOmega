@@ -10,6 +10,24 @@ from cad.legacy.ingest import classify
 from cad.legacy.pilot import checklist
 from cad.legacy.recon import primitives_from_dxf_text, to_3d
 
+LAYER_MAP = {
+    "0": "_ignore",
+    "DEFPOINTS": "_ignore",
+    "DIMS": "dims",
+    "DIMENSIONS": "dims",
+    "TEXT": "annot",
+    "NOTES": "annot",
+    "TITLE": "annot",
+    "OBJECT": "profile",
+    "PART": "profile",
+    "OUTLINE": "profile",
+    "HIDDEN": "hidden",
+    "PHANTOM": "hidden",
+    "CENTER": "center",
+    "HATCH": "cut",
+    "SECTION": "cut",
+}
+
 
 def run(path: Path, sidecar: str = "") -> dict:
     meta = classify(path)
@@ -19,7 +37,7 @@ def run(path: Path, sidecar: str = "") -> dict:
     prims = primitives_from_dxf_text(text) if text else []
     layers = {p.layer for p in prims}
     if layers:
-        meta.layer_map = {x: x.lower() for x in layers}
+        meta.layer_map = {x: LAYER_MAP.get(x.upper(), f"misc_{x.lower()}") for x in layers}
     solid = to_3d(meta, prims)
     gate = checklist(meta)
     return {
@@ -28,7 +46,9 @@ def run(path: Path, sidecar: str = "") -> dict:
         "units": meta.units,
         "title": meta.title,
         "revision": meta.revision,
+        "layer_map": meta.layer_map,
         "solid": solid.__dict__,
+        "filled": meta.filled,
         "pilot": gate,
     }
 
